@@ -12,10 +12,11 @@ import struct, time
 def scale(val, src, dst):
     return (float(val-src[0]) / (src[1]-src[0])) * (dst[1]-dst[0])+dst[0]
 
-# Initialise brick and motors
+# Initialise brick
 ev3 = EV3Brick()
 ev3.speaker.beep()
 
+# Declare motor ports
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
 
@@ -40,34 +41,19 @@ while event:
     if ev_type == 3:
 
         if code == 0: # Left stick x
-            turn = scale(value, (0,255), (-100,100))
+            pass
             
         if code == 1: # Left stick y
             drive = scale(value, (0,255), (-100,100))
 
         if code == 3: # Right stick x
-            pass
+            turn = scale(value, (0,255), (-100,100))
 
         if code == 4: # Right stick y
             pass
-    
-    # Button pressed
-    if ev_type == 1:
-
-        if code == 304: # X button
-            pass
-
-        if code == 305: # O button
-            pass
-        
-        if code == 307: # △ button
-            pass
-
-        if code == 308: # □ button
-            pass
 
     # Set speeds/directions and drive motors
-    left_speed = -drive + turn
+    left_speed = drive - turn
     right_speed = drive + turn
 
     left_motor.dc(left_speed)
